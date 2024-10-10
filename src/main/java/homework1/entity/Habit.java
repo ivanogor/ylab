@@ -1,6 +1,5 @@
 package homework1.entity;
 
-import homework1.dto.GenerateHabitStatisticsDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

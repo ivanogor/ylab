@@ -91,15 +91,12 @@ public class HabitServiceImpl implements HabitService {
         LocalDate startDate;
 
         switch (generateHabitStatisticsDto.getPeriod()) {
-            case DAY -> {
-                startDate = now.minusDays(1);
-            }
-            case WEEK -> {
-                startDate = now.minusWeeks(1);
-            }
-            case MONTH -> {
-                startDate = now.minusMonths(1);
-            }
+            case DAY -> startDate = now.minusDays(1);
+
+            case WEEK -> startDate = now.minusWeeks(1);
+
+            case MONTH -> startDate = now.minusMonths(1);
+
             default ->
                     throw new IllegalArgumentException("Unsupported period: " + generateHabitStatisticsDto.getPeriod());
         }
@@ -138,19 +135,19 @@ public class HabitServiceImpl implements HabitService {
         for (int i = 1; i < completions.size(); i++) {
             LocalDate currentDate = completions.get(i).getCompletionDate();
 
-            switch (habit.getFrequency()){
+            switch (habit.getFrequency()) {
                 case DAILY -> {
-                    if (currentDate.isEqual(previousDate.plusDays(1))){
+                    if (currentDate.isEqual(previousDate.plusDays(1))) {
                         streak++;
                     }
                 }
                 case WEEKLY -> {
-                    if (currentDate.isEqual(previousDate.plusWeeks(1))){
+                    if (currentDate.isEqual(previousDate.plusWeeks(1))) {
                         streak++;
                     }
                 }
             }
-            if(!currentDate.isEqual(previousDate)){
+            if (!currentDate.isEqual(previousDate)) {
                 break;
             }
             previousDate = currentDate;
@@ -160,7 +157,7 @@ public class HabitServiceImpl implements HabitService {
     }
 
     @Override
-    public double getCompletionPercentage(GetCompletionPercentageDto getCompletionPercentageDto){
+    public double getCompletionPercentage(GetCompletionPercentageDto getCompletionPercentageDto) {
         Habit habit = getHabitByName(getCompletionPercentageDto.getUser(), getCompletionPercentageDto.getName());
         if (Objects.isNull(habit)) {
             throw new HabitNotFoundException();
@@ -171,7 +168,7 @@ public class HabitServiceImpl implements HabitService {
         LocalDate startDate = getCompletionPercentageDto.getStartDate();
         LocalDate endDate = getCompletionPercentageDto.getEndDate();
         List<Habit.HabitCompletion> habitCompletions = habit.getCompletions();
-        switch (habit.getFrequency()){
+        switch (habit.getFrequency()) {
             case DAILY -> {
                 total = getCompletionPercentageDto.getStartDate()
                         .datesUntil(getCompletionPercentageDto.getEndDate().plusDays(1)).count();
@@ -195,7 +192,7 @@ public class HabitServiceImpl implements HabitService {
             }
         }
 
-        if(total == 0){
+        if (total == 0) {
             throw new IllegalArgumentException("Wrong date in getCompletionPercentageDto");
         }
 
@@ -203,7 +200,7 @@ public class HabitServiceImpl implements HabitService {
     }
 
     @Override
-    public UserProgressReportDto generateUserProgressReport(GenerateUserProgressReportDto generateUserProgressReportDto){
+    public UserProgressReportDto generateUserProgressReport(GenerateUserProgressReportDto generateUserProgressReportDto) {
         List<Habit> habits = generateUserProgressReportDto.getUser().getHabits();
         List<UserProgressReportDto.HabitProgress> habitProgresses = habits.stream()
                 .map(habit -> {
@@ -213,7 +210,7 @@ public class HabitServiceImpl implements HabitService {
                             habit.getName(),
                             generateUserProgressReportDto.getStartDate(),
                             generateUserProgressReportDto.getEndDate()
-                            ));
+                    ));
                     return UserProgressReportDto.HabitProgress.builder()
                             .streak(streak)
                             .completionPercentage(completionPercentage)
@@ -226,6 +223,7 @@ public class HabitServiceImpl implements HabitService {
                 .habitProgresses(habitProgresses)
                 .build();
     }
+
     /**
      * Вспомогательный метод для поиска привычки пользователя по имени.
      *
