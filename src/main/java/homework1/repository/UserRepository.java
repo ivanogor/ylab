@@ -39,6 +39,6 @@ public class UserRepository {
     }
 
     public List<User> findAll() {
-        return List.copyOf(users.values().stream().filter(user -> !user.isBlocked()).toList());
+        return List.copyOf(users.values());
     }
 }

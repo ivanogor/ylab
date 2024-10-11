@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import utils.UserUtils;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -287,5 +289,27 @@ public class UserServiceTests {
         when(userRepository.findByEmail(anyString())).thenReturn(user);
         //then
         assertThrows(NoPermissionsException.class, () -> userService.unblockUser(userActionRequestDto));
+    }
+
+    @Test
+    @DisplayName("Get all user by admin functionality")
+    public void givenUserAdmin_whenGetAllUsers_thenUsersAreReturned() {
+        //given
+        User user = UserUtils.getSecondUser();
+        //when
+        when(userRepository.findAll()).thenReturn(List.of(UserUtils.getFirstUser(), UserUtils.getSecondUser()));
+        //then
+        assertThat(userService.getAllUsers(user).size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("Get all user by user functionality")
+    public void givenUser_whenGetAllUsers_thenExceptionIsThrown() {
+        //given
+        User user = UserUtils.getFirstUser();
+        //when
+
+        //then
+        assertThrows(NoPermissionsException.class, () -> userService.getAllUsers(user));
     }
 }
