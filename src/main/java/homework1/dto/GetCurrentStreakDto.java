@@ -4,6 +4,7 @@ import homework1.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO (Data Transfer Object) для получения текущей серии выполненных привычек.
@@ -11,6 +12,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class GetCurrentStreakDto {
 
     /**

@@ -3,6 +3,7 @@ package homework1.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO (Data Transfer Object) для сброса пароля пользователя.
@@ -10,6 +11,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class ResetPasswordDto {
 
     /**

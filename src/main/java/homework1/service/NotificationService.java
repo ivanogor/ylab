@@ -13,13 +13,5 @@ public interface NotificationService {
      * @param user Пользователь, которому отправляется уведомление.
      * @param message Сообщение, которое нужно отправить.
      */
-    void sendEmailNotification(User user, String message);
-
-    /**
-     * Отправляет push-уведомление пользователю.
-     *
-     * @param user Пользователь, которому отправляется уведомление.
-     * @param message Сообщение, которое нужно отправить.
-     */
-    void sendPushNotification(User user, String message);
+    void sendNotification(User user, String message);
 }

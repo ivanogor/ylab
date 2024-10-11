@@ -7,9 +7,10 @@ import homework1.exception.HabitNotFoundException;
 import homework1.service.HabitService;
 
 import java.time.LocalDate;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -30,19 +31,21 @@ public class HabitServiceImpl implements HabitService {
     public boolean updateHabit(UpdateHabitDto updateHabitDto) {
         Habit habit = getHabitByName(updateHabitDto.getUser(), updateHabitDto.getOldHabitName());
 
-        if (Objects.nonNull(updateHabitDto.getNewHabitName())) {
-            habit.setName(updateHabitDto.getNewHabitName());
+        String newHabitName = updateHabitDto.getNewHabitName();
+        if (Objects.nonNull(newHabitName)) {
+            habit.setName(newHabitName);
         }
 
-        if (Objects.nonNull(updateHabitDto.getNewHabitDescription())) {
-            habit.setDescription(updateHabitDto.getNewHabitDescription());
+        String newHabitDescription = updateHabitDto.getNewHabitDescription();
+        if (Objects.nonNull(newHabitDescription)) {
+            habit.setDescription(newHabitDescription);
         }
 
-        if (Objects.nonNull(updateHabitDto.getNewFrequency())) {
+        Habit.Frequency newFrequency = updateHabitDto.getNewFrequency();
+        if (Objects.nonNull(newFrequency)) {
             habit.setFrequency(updateHabitDto.getNewFrequency());
         }
 
-        updateHabitDto.getUser().getHabits().add(habit);
         return true;
     }
 
@@ -55,8 +58,8 @@ public class HabitServiceImpl implements HabitService {
     }
 
     @Override
-    public List<Habit> getAllHabits(User user) {
-        return user.getHabits();
+    public Set<Habit> getAllHabits(User user) {
+        return Collections.unmodifiableSet(user.getHabits());
     }
 
     @Override
@@ -80,17 +83,20 @@ public class HabitServiceImpl implements HabitService {
     @Override
     public boolean markHabitAsCompleted(CompletionHabitDto completionHabitDto) {
         Habit habit = getHabitByName(completionHabitDto.getUser(), completionHabitDto.getHabitName());
-        habit.getCompletions().add(new Habit.HabitCompletion(completionHabitDto.getDate(), true));
+        habit.getCompletions().add(completionHabitDto.getDate());
+        habit.setCompleted(true);
+        //в логике scheduler в зависимости от frequency, будет ставится completed -> false с частотой.
+        //также использоваться при отправке уведомления
         return true;
     }
 
     @Override
-    public long generateHabitStatistics(GenerateHabitStatisticsDto generateHabitStatisticsDto) {
-        Habit habit = getHabitByName(generateHabitStatisticsDto.getUser(), generateHabitStatisticsDto.getHabitName());
+    public long countHabitCompletionsForPeriod(CountHabitCompletionsForPeriodDto countHabitCompletionsForPeriodDto) {
+        Habit habit = getHabitByName(countHabitCompletionsForPeriodDto.getUser(), countHabitCompletionsForPeriodDto.getHabitName());
         LocalDate now = LocalDate.now();
         LocalDate startDate;
 
-        switch (generateHabitStatisticsDto.getPeriod()) {
+        switch (countHabitCompletionsForPeriodDto.getPeriod()) {
             case DAY -> startDate = now.minusDays(1);
 
             case WEEK -> startDate = now.minusWeeks(1);
@@ -98,18 +104,12 @@ public class HabitServiceImpl implements HabitService {
             case MONTH -> startDate = now.minusMonths(1);
 
             default ->
-                    throw new IllegalArgumentException("Unsupported period: " + generateHabitStatisticsDto.getPeriod());
+                    throw new IllegalArgumentException("Unsupported period: " + countHabitCompletionsForPeriodDto.getPeriod());
         }
 
         return habit.getCompletions().stream()
-                .filter(hb -> {
-                    LocalDate completionDate = hb.getCompletionDate();
-                    return completionDate.isAfter(startDate) || completionDate.isEqual(startDate);
-                })
-                .filter(h -> {
-                    LocalDate completionDate = h.getCompletionDate();
-                    return completionDate.isBefore(now) || completionDate.isEqual(now);
-                })
+                .filter(cd -> cd.isAfter(startDate) || cd.isEqual(startDate))
+                .filter(cd -> cd.isBefore(now) || cd.isEqual(now))
                 .count();
     }
 
@@ -121,39 +121,40 @@ public class HabitServiceImpl implements HabitService {
             throw new HabitNotFoundException();
         }
 
-        List<Habit.HabitCompletion> completions = habit.getCompletions();
+        List<LocalDate> completions = habit.getCompletions();
 
         if (Objects.isNull(completions) || completions.isEmpty()) {
             return 0;
         }
 
-        completions.sort(Comparator.comparing(Habit.HabitCompletion::getCompletionDate));
+        completions.sort(LocalDate::compareTo);
 
-        int streak = 1;
-        LocalDate previousDate = completions.getFirst().getCompletionDate();
+        int currentStreak = 1;
+        LocalDate previousDate = completions.getLast();
 
-        for (int i = 1; i < completions.size(); i++) {
-            LocalDate currentDate = completions.get(i).getCompletionDate();
+        for (int i = completions.size() - 2; i >= 0; i--) {
+            LocalDate currentDate = completions.get(i);
 
             switch (habit.getFrequency()) {
-                case DAILY -> {
-                    if (currentDate.isEqual(previousDate.plusDays(1))) {
-                        streak++;
+                case DAILY:
+                    if (currentDate.isEqual(previousDate.minusDays(1))) {
+                        currentStreak++;
+                    } else {
+                        return currentStreak;
                     }
-                }
-                case WEEKLY -> {
-                    if (currentDate.isEqual(previousDate.plusWeeks(1))) {
-                        streak++;
+                    break;
+                case WEEKLY:
+                    if (currentDate.isEqual(previousDate.minusWeeks(1))) {
+                        currentStreak++;
+                    } else {
+                        return currentStreak;
                     }
-                }
-            }
-            if (!currentDate.isEqual(previousDate)) {
-                break;
+                    break;
             }
             previousDate = currentDate;
         }
 
-        return streak;
+        return currentStreak;
     }
 
     @Override
@@ -167,28 +168,22 @@ public class HabitServiceImpl implements HabitService {
         long completed = 0;
         LocalDate startDate = getCompletionPercentageDto.getStartDate();
         LocalDate endDate = getCompletionPercentageDto.getEndDate();
-        List<Habit.HabitCompletion> habitCompletions = habit.getCompletions();
+        List<LocalDate> habitCompletions = habit.getCompletions();
         switch (habit.getFrequency()) {
             case DAILY -> {
                 total = getCompletionPercentageDto.getStartDate()
                         .datesUntil(getCompletionPercentageDto.getEndDate().plusDays(1)).count();
                 completed = habitCompletions.stream()
-                        .filter(h -> {
-                            LocalDate date = h.getCompletionDate();
-                            return !date.isBefore(getCompletionPercentageDto.getStartDate()) &&
-                                    !date.isAfter(getCompletionPercentageDto.getEndDate());
-                        }).count();
+                        .filter(date -> !date.isBefore(getCompletionPercentageDto.getStartDate()) &&
+                                !date.isAfter(getCompletionPercentageDto.getEndDate())).count();
             }
             case WEEKLY -> {
                 total = startDate.datesUntil(endDate.plusDays(1))
                         .filter(date -> date.getDayOfWeek() == startDate.getDayOfWeek())
                         .count();
                 completed = habitCompletions.stream()
-                        .filter(h -> {
-                            LocalDate date = h.getCompletionDate();
-                            return !date.isBefore(getCompletionPercentageDto.getStartDate()) && !date.isAfter(getCompletionPercentageDto.getEndDate())
-                                    && date.getDayOfWeek() == startDate.getDayOfWeek();
-                        }).count();
+                        .filter(date -> !date.isBefore(getCompletionPercentageDto.getStartDate()) && !date.isAfter(getCompletionPercentageDto.getEndDate())
+                                && date.getDayOfWeek() == startDate.getDayOfWeek()).count();
             }
         }
 
@@ -201,7 +196,7 @@ public class HabitServiceImpl implements HabitService {
 
     @Override
     public UserProgressReportDto generateUserProgressReport(GenerateUserProgressReportDto generateUserProgressReportDto) {
-        List<Habit> habits = generateUserProgressReportDto.getUser().getHabits();
+        Set<Habit> habits = generateUserProgressReportDto.getUser().getHabits();
         List<UserProgressReportDto.HabitProgress> habitProgresses = habits.stream()
                 .map(habit -> {
                     int streak = getCurrentStreak(new GetCurrentStreakDto(generateUserProgressReportDto.getUser(), habit.getName()));
@@ -223,7 +218,6 @@ public class HabitServiceImpl implements HabitService {
                 .habitProgresses(habitProgresses)
                 .build();
     }
-
     /**
      * Вспомогательный метод для поиска привычки пользователя по имени.
      *

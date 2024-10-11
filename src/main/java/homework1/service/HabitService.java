@@ -5,6 +5,7 @@ import homework1.entity.Habit;
 import homework1.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Интерфейс для управления привычками пользователя.
@@ -43,7 +44,7 @@ public interface HabitService {
      * @param user Пользователь, чьи привычки необходимо получить.
      * @return Список привычек пользователя.
      */
-    List<Habit> getAllHabits(User user);
+    Set<Habit> getAllHabits(User user);
 
     /**
      * Возвращает список привычек пользователя, отфильтрованных по дате создания.
@@ -72,10 +73,10 @@ public interface HabitService {
     /**
      * Генерирует статистику по привычкам пользователя.
      *
-     * @param generateHabitStatisticsDto Объект DTO, содержащий данные для генерации статистики.
+     * @param countHabitCompletionsForPeriodDto Объект DTO, содержащий данные для генерации статистики.
      * @return Количество выполненных привычек.
      */
-    long generateHabitStatistics(GenerateHabitStatisticsDto generateHabitStatisticsDto);
+    long countHabitCompletionsForPeriod(CountHabitCompletionsForPeriodDto countHabitCompletionsForPeriodDto);
 
     /**
      * Возвращает текущую серию выполненных привычек.
