@@ -14,96 +14,96 @@
 
 ## Регистрация нового пользователя
 1  
-John Doe
-john.doe@example.com
-password123
+John Doe  
+john.doe@example.com  
+password123  
 
 ## Вход в систему
-2
-john.doe@example.com
-password123
+2  
+john.doe@example.com  
+password123  
 
 ## Обновление пользователя
-3
-Jane Doe
-jane.doe@example.com
-newpassword123
+3  
+Jane Doe  
+jane.doe@example.com  
+newpassword123  
 
 ## Удаление пользователя
-4
-john.doe@example.com
+4  
+john.doe@example.com  
 
 ## Сброс пароля
-5
-john.doe@example.com
-newpassword456
+5  
+john.doe@example.com  
+newpassword456  
 
 ## Блокировка пользователя (требуется администратор)
-6
-john.doe@example.com
+6  
+john.doe@example.com  
 
 ## Разблокировка пользователя (требуется администратор)
-7
-john.doe@example.com
+7  
+john.doe@example.com  
 
 ## Создание привычки
-8
-Exercise
-Daily exercise routine
-DAILY
+8  
+Exercise  
+Daily exercise routine  
+DAILY  
 
 ## Обновление привычки
-9
-Exercise
-New Exercise
-Updated daily exercise routine
-DAILY
+9  
+Exercise  
+New Exercise  
+Updated daily exercise routine  
+DAILY  
 
 ## Удаление привычки
-10
-New Exercise
+10  
+New Exercise  
 
 ## Получение всех привычек
-11
+11  
 
 ## Получение привычек по дате создания
-12
-2023-10-01
+12  
+2023-10-01  
 
 ## Получение привычек по частоте
-13
-DAILY
+13  
+DAILY  
 
 ## Отметка привычки как выполненной
-14
-Exercise
-2023-10-01
+14  
+Exercise  
+2023-10-01  
 
 ## Подсчет выполнений привычки за период
-15
-Exercise
-DAY
+15  
+Exercise  
+DAY  
 
 ## Получение текущей серии выполнений
-16
-Exercise
+16  
+Exercise  
 
 ## Получение процента выполнения привычки
-17
-Exercise
-2023-10-01
-2023-10-31
+17  
+Exercise  
+2023-10-01  
+2023-10-31  
 
 ## Генерация отчета о прогрессе пользователя
-18
-2023-10-01
-2023-10-31
+18  
+2023-10-01  
+2023-10-31  
 
 ## Получение всех пользователей (требуется администратор)
-19
+19  
 
 ## Получение всех привычек (требуется администратор)
-20
+20  
 
 ## Выход
 0
