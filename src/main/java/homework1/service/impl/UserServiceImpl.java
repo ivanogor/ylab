@@ -5,17 +5,22 @@ import homework1.dto.LoginDto;
 import homework1.dto.ResetPasswordDto;
 import homework1.dto.UpdateUserDto;
 import homework1.entity.User;
-import homework1.exception.*;
+import homework1.exception.NoPermissionsException;
+import homework1.exception.NotValidEmailException;
+import homework1.exception.UserAlreadyExistException;
+import homework1.exception.UserNotFoundException;
+import homework1.exception.WrongPasswordException;
 import homework1.repository.UserRepository;
 import homework1.service.UserService;
 import homework1.utils.PasswordHasher;
 import lombok.RequiredArgsConstructor;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Сервис для управления пользователями.
+ * Реализация интерфейса {@link UserService} для управления пользователями.
  */
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -26,6 +31,16 @@ public class UserServiceImpl implements UserService {
      */
     private static final Pattern EMAIL_REGEX = Pattern.compile(
             "^[A-Za-z0-9+_.-]+@(.+)$");
+
+    /**
+     * Проверяет, является ли email валидным.
+     *
+     * @param email Email для проверки.
+     * @return true, если email валиден, иначе false.
+     */
+    private boolean isValidEmail(String email) {
+        return EMAIL_REGEX.matcher(email).matches();
+    }
 
     @Override
     public boolean register(User user) {
@@ -59,7 +74,6 @@ public class UserServiceImpl implements UserService {
     public boolean update(UpdateUserDto updateUserDto) {
         User user = userRepository.findByEmail(updateUserDto.getEmail());
         if (Objects.nonNull(user)) {
-
             if (Objects.nonNull(updateUserDto.getNewName())) {
                 user.setName(updateUserDto.getNewName());
             }
@@ -69,7 +83,6 @@ public class UserServiceImpl implements UserService {
             if (Objects.nonNull(updateUserDto.getNewPassword())) {
                 user.setPassword(updateUserDto.getNewPassword());
             }
-
             return true;
         }
         throw new UserNotFoundException();
@@ -87,9 +100,7 @@ public class UserServiceImpl implements UserService {
 
         if (currentUser.getRole() == User.Role.ADMIN || currentUser.equals(userToDelete)) {
             return userRepository.deleteUser(email);
-
-        }
-        else {
+        } else {
             throw new NoPermissionsException();
         }
     }
@@ -106,12 +117,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean blockUser(UserActionRequestDto userActionRequestDto){
+    public boolean blockUser(UserActionRequestDto userActionRequestDto) {
         User currentUser = userActionRequestDto.getCurrentUser();
         String email = userActionRequestDto.getEmailToAction();
         User userToBlock = userRepository.findByEmail(email);
 
-        if(Objects.isNull(userToBlock)){
+        if (Objects.isNull(userToBlock)) {
             throw new UserNotFoundException();
         }
 
@@ -129,7 +140,7 @@ public class UserServiceImpl implements UserService {
         String email = userActionRequestDto.getEmailToAction();
         User userToUnblock = userRepository.findByEmail(email);
 
-        if(Objects.isNull(userToUnblock)){
+        if (Objects.isNull(userToUnblock)) {
             throw new UserNotFoundException();
         }
 
@@ -147,18 +158,5 @@ public class UserServiceImpl implements UserService {
             throw new NoPermissionsException();
         }
         return userRepository.findAll();
-    }
-    /**
-     * Проверяет, является ли переданный email-адрес валидным.
-     *
-     * @param email Email-адрес, который необходимо проверить на валидность.
-     * @return Возвращает {@code true}, если email-адрес валиден.
-     * @throws NotValidEmailException Выбрасывается, если переданный email-адрес не соответствует формату.
-     */
-    private boolean isValidEmail(String email) {
-        if (email == null || !EMAIL_REGEX.matcher(email).matches()) {
-            throw new NotValidEmailException();
-        }
-        return true;
     }
 }

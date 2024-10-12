@@ -14,9 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Сервис для управления привычками пользователя.
- * Предоставляет методы для создания, обновления, удаления привычек,
- * а также для получения статистики и отчетов о прогрессе.
+ * Реализация интерфейса {@link HabitService} для управления привычками.
  */
 public class HabitServiceImpl implements HabitService {
     @Override

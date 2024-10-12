@@ -9,6 +9,7 @@ import java.util.Set;
 
 /**
  * Класс, представляющий пользователя системы.
+ * Этот класс содержит информацию о пользователе, включая его имя, email, пароль, список привычек, роль и статус блокировки.
  */
 @Data
 @AllArgsConstructor
@@ -36,11 +37,20 @@ public class User {
      */
     private Set<Habit> habits;
 
+    /**
+     * Роль пользователя в системе.
+     */
     private Role role;
 
+    /**
+     * Флаг, указывающий, заблокирован ли пользователь.
+     */
     private boolean isBlocked;
 
-    public enum Role{
+    /**
+     * Перечисление возможных ролей пользователя.
+     */
+    public enum Role {
         USER, ADMIN
     }
 }

@@ -3,20 +3,32 @@ package homework1.command;
 import homework1.entity.User;
 import homework1.service.UserService;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Scanner;
 
+/**
+ * Команда для регистрации нового пользователя.
+ * Эта команда позволяет пользователю зарегистрироваться в системе, указав свое имя, email и пароль.
+ */
+@RequiredArgsConstructor
 public class RegisterUserCommand implements Command {
     private final UserService userService;
     private final Scanner scanner;
+
     @Getter
     private User currentUser;
 
-    public RegisterUserCommand(UserService userService, Scanner scanner) {
-        this.userService = userService;
-        this.scanner = scanner;
-    }
-
+    /**
+     * Метод для выполнения команды регистрации нового пользователя.
+     * 1. Запрашивает у пользователя имя.
+     * 2. Запрашивает у пользователя email.
+     * 3. Запрашивает у пользователя пароль.
+     * 4. Создает объект User с указанными данными и ролью USER.
+     * 5. Вызывает метод регистрации пользователя в UserService.
+     * 6. Выводит сообщение об успешной регистрации.
+     * 7. Устанавливает текущего пользователя.
+     */
     @Override
     public void execute() {
         System.out.println("Enter name:");
@@ -38,5 +50,4 @@ public class RegisterUserCommand implements Command {
         System.out.println("User registered successfully.");
         this.currentUser = user;
     }
-
 }

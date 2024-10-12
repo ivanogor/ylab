@@ -8,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO (Data Transfer Object) для обновления информации о привычке.
+ * Data Transfer Object (DTO) для обновления информации о привычке.
+ * Этот DTO используется для передачи данных, необходимых для обновления привычки,
+ * включая старое имя привычки, новое имя, новое описание и новую частоту выполнения.
  */
 @Data
 @AllArgsConstructor
@@ -16,7 +18,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateHabitDto {
 
+    /**
+     * Пользователь, который выполняет обновление.
+     */
     private User user;
+
     /**
      * Старое имя привычки, которую нужно обновить.
      */

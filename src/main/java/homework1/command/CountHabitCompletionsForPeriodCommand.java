@@ -3,20 +3,29 @@ package homework1.command;
 import homework1.dto.CountHabitCompletionsForPeriodDto;
 import homework1.service.HabitService;
 import homework1.utils.UserHolder;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Scanner;
 
+/**
+ * Команда для подсчета количества выполнений привычки за определенный период.
+ * Эта команда позволяет пользователю узнать, сколько раз он выполнил определенную привычку за указанный период.
+ *
+ */
+@RequiredArgsConstructor
 public class CountHabitCompletionsForPeriodCommand implements Command {
     private final HabitService habitService;
     private final Scanner scanner;
     private final UserHolder userHolder;
 
-    public CountHabitCompletionsForPeriodCommand(HabitService habitService, Scanner scanner, UserHolder userHolder) {
-        this.habitService = habitService;
-        this.scanner = scanner;
-        this.userHolder = userHolder;
-    }
-
+    /**
+     * Метод для выполнения команды подсчета количества выполнений привычки за определенный период.
+     * 1. Запрашивает у пользователя название привычки.
+     * 2. Запрашивает у пользователя период (DAY/WEEK/MONTH).
+     * 3. Создает объект CountHabitCompletionsForPeriodDto с текущим пользователем, названием привычки и указанным периодом.
+     * 4. Вызывает метод подсчета выполнений привычки за период в HabitService.
+     * 5. Выводит количество выполнений.
+     */
     @Override
     public void execute() {
         System.out.println("Enter habit name:");
