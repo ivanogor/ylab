@@ -1,14 +1,14 @@
 package service;
 
-import homework1.dto.LoginDto;
-import homework1.dto.ResetPasswordDto;
-import homework1.dto.UpdateUserDto;
-import homework1.dto.UserActionRequestDto;
-import homework1.entity.User;
-import homework1.exception.*;
-import homework1.repository.UserRepository;
-import homework1.service.impl.UserServiceImpl;
-import homework1.utils.PasswordHasher;
+import homework1.model.dto.LoginDto;
+import homework1.model.dto.ResetPasswordDto;
+import homework1.model.dto.UpdateUserDto;
+import homework1.model.dto.UserActionRequestDto;
+import homework1.model.entity.User;
+import homework1.model.exception.*;
+import homework1.model.repository.impl.UserRepositoryImpl;
+import homework1.model.service.impl.UserServiceImpl;
+import homework1.model.utils.PasswordHasher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class UserServiceTests {
 
     @Mock
-    private UserRepository userRepository;
+    private UserRepositoryImpl userRepositoryImpl;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -39,11 +39,11 @@ public class UserServiceTests {
         //given
         User user = UserUtils.getFirstUser();
         //when
-        when(userRepository.isExist(anyString())).thenReturn(false);
+        when(userRepositoryImpl.isExist(anyString())).thenReturn(false);
         boolean result = userService.register(user);
         //then
         assertTrue(result);
-        verify(userRepository).addUser(user);
+        verify(userRepositoryImpl).addUser(user);
     }
 
     @Test
@@ -52,10 +52,10 @@ public class UserServiceTests {
         //given
         User user = UserUtils.getFirstUser();
         //when
-        when(userRepository.isExist(anyString())).thenReturn(true);
+        when(userRepositoryImpl.isExist(anyString())).thenReturn(true);
         //then
         assertThrows(UserAlreadyExistException.class, () -> userService.register(user));
-        verify(userRepository, never()).addUser(user);
+        verify(userRepositoryImpl, never()).addUser(user);
     }
 
     @Test
@@ -65,10 +65,10 @@ public class UserServiceTests {
         User user = UserUtils.getFirstUser();
         user.setEmail("invalid.com");
         //when
-        when(userRepository.isExist(anyString())).thenReturn(false);
+        when(userRepositoryImpl.isExist(anyString())).thenReturn(false);
         //then
         assertThrows(NotValidEmailException.class, () -> userService.register(user));
-        verify(userRepository, never()).addUser(user);
+        verify(userRepositoryImpl, never()).addUser(user);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class UserServiceTests {
         //given
         LoginDto loginDto = UserUtils.getLoginDto();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(null);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(null);
         //then
         assertThrows(UserNotFoundException.class, () -> userService.login(loginDto));
     }
@@ -90,7 +90,7 @@ public class UserServiceTests {
         User user = UserUtils.getFirstUser();
         user.setPassword(PasswordHasher.hashPassword(user.getPassword()));
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(user);
         //then
         User expected = userService.login(loginDto);
         assertThat(expected).isNotNull();
@@ -104,7 +104,7 @@ public class UserServiceTests {
         User user = UserUtils.getFirstUser();
         user.setPassword(PasswordHasher.hashPassword("wrongPassword"));
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(user);
         //then
         assertThrows(WrongPasswordException.class, () -> userService.login(loginDto));
     }
@@ -116,7 +116,7 @@ public class UserServiceTests {
         UpdateUserDto updateUserDto = UserUtils.getUpdateUserDto();
         User user = UserUtils.getFirstUser();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(user);
         boolean result = userService.update(updateUserDto);
         //then
         assertTrue(result);
@@ -131,7 +131,7 @@ public class UserServiceTests {
         //given
         UpdateUserDto updateUserDto = UserUtils.getUpdateUserDto();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(null);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(null);
         //then
         assertThrows(UserNotFoundException.class, () -> userService.update(updateUserDto));
     }
@@ -143,12 +143,12 @@ public class UserServiceTests {
         UserActionRequestDto userActionRequestDto = UserUtils.getUserWithUserRoleActionWhichDeleteHimselfRequestDto();
         User user = userActionRequestDto.getCurrentUser();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
-        when(userRepository.deleteUser(anyString())).thenReturn(true);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(user);
+        when(userRepositoryImpl.deleteUser(anyString())).thenReturn(true);
         boolean result = userService.delete(userActionRequestDto);
         //then
         assertTrue(result);
-        verify(userRepository).deleteUser(anyString());
+        verify(userRepositoryImpl).deleteUser(anyString());
     }
 
     @Test
@@ -158,12 +158,12 @@ public class UserServiceTests {
         UserActionRequestDto userActionRequestDto = UserUtils.getUserWithAdminRoleActionRequestDto();
         User userToDelete = UserUtils.getFirstUser();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(userToDelete);
-        when(userRepository.deleteUser(anyString())).thenReturn(true);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(userToDelete);
+        when(userRepositoryImpl.deleteUser(anyString())).thenReturn(true);
         boolean result = userService.delete(userActionRequestDto);
         //then
         assertTrue(result);
-        verify(userRepository).deleteUser(anyString());
+        verify(userRepositoryImpl).deleteUser(anyString());
     }
 
     @Test
@@ -172,7 +172,7 @@ public class UserServiceTests {
         //given
         UserActionRequestDto userActionRequestDto = UserUtils.getUserWithAdminRoleActionRequestDto();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(null);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(null);
         //then
         assertThrows(UserNotFoundException.class, () -> userService.delete(userActionRequestDto));
     }
@@ -184,10 +184,10 @@ public class UserServiceTests {
         UserActionRequestDto userActionRequestDto = UserUtils.getUserWithUserRoleWhichActionAnotherUserActionRequestDto();
         User userToDelete = UserUtils.getThirdUser();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(userToDelete);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(userToDelete);
         //then
         assertThrows(NoPermissionsException.class, () -> userService.delete(userActionRequestDto));
-        verify(userRepository, never()).deleteUser(anyString());
+        verify(userRepositoryImpl, never()).deleteUser(anyString());
     }
 
     @Test
@@ -197,7 +197,7 @@ public class UserServiceTests {
         ResetPasswordDto resetPasswordDto = UserUtils.getResetPasswordDto();
         User user = UserUtils.getFirstUser();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(user);
         boolean result = userService.resetPassword(resetPasswordDto);
         //then
         assertTrue(result);
@@ -210,7 +210,7 @@ public class UserServiceTests {
         //given
         ResetPasswordDto resetPasswordDto = UserUtils.getResetPasswordDto();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(null);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(null);
         //then
         assertThrows(UserNotFoundException.class, () -> userService.resetPassword(resetPasswordDto));
     }
@@ -223,7 +223,7 @@ public class UserServiceTests {
         User userToBlock = UserUtils.getFirstUser();
         assertThat(userToBlock.isBlocked()).isEqualTo(false);
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(userToBlock);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(userToBlock);
         boolean result = userService.blockUser(userActionRequestDto);
         //then
         assertTrue(result);
@@ -236,7 +236,7 @@ public class UserServiceTests {
         //given
         UserActionRequestDto userActionRequestDto = UserUtils.getUserWithAdminRoleActionRequestDto();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(null);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(null);
         //then
         assertThrows(UserNotFoundException.class, () -> userService.blockUser(userActionRequestDto));
     }
@@ -248,7 +248,7 @@ public class UserServiceTests {
         UserActionRequestDto userActionRequestDto = UserUtils.getUserWithUserRoleWhichActionAnotherUserActionRequestDto();
         User user = UserUtils.getFirstUser();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(user);
         //then
         assertThrows(NoPermissionsException.class, () -> userService.blockUser(userActionRequestDto));
     }
@@ -261,7 +261,7 @@ public class UserServiceTests {
         User userToBlock = UserUtils.getFirstUser();
         assertThat(userToBlock.isBlocked()).isEqualTo(false);
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(userToBlock);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(userToBlock);
         boolean result = userService.unblockUser(userActionRequestDto);
         //then
         assertTrue(result);
@@ -274,7 +274,7 @@ public class UserServiceTests {
         //given
         UserActionRequestDto userActionRequestDto = UserUtils.getUserWithAdminRoleActionRequestDto();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(null);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(null);
         //then
         assertThrows(UserNotFoundException.class, () -> userService.unblockUser(userActionRequestDto));
     }
@@ -286,7 +286,7 @@ public class UserServiceTests {
         UserActionRequestDto userActionRequestDto = UserUtils.getUserWithUserRoleWhichActionAnotherUserActionRequestDto();
         User user = UserUtils.getFirstUser();
         //when
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
+        when(userRepositoryImpl.findByEmail(anyString())).thenReturn(user);
         //then
         assertThrows(NoPermissionsException.class, () -> userService.unblockUser(userActionRequestDto));
     }
@@ -297,7 +297,7 @@ public class UserServiceTests {
         //given
         User user = UserUtils.getSecondUser();
         //when
-        when(userRepository.findAll()).thenReturn(List.of(UserUtils.getFirstUser(), UserUtils.getSecondUser()));
+        when(userRepositoryImpl.findAll()).thenReturn(List.of(UserUtils.getFirstUser(), UserUtils.getSecondUser()));
         //then
         assertThat(userService.getAllUsers(user).size()).isEqualTo(2);
     }

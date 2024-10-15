@@ -1,7 +1,7 @@
 package utils;
 
-import homework1.dto.*;
-import homework1.entity.Habit;
+import homework1.model.dto.*;
+import homework1.model.entity.Habit;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;

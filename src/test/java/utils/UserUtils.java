@@ -1,10 +1,10 @@
 package utils;
 
-import homework1.dto.LoginDto;
-import homework1.dto.ResetPasswordDto;
-import homework1.dto.UpdateUserDto;
-import homework1.dto.UserActionRequestDto;
-import homework1.entity.User;
+import homework1.model.dto.LoginDto;
+import homework1.model.dto.ResetPasswordDto;
+import homework1.model.dto.UpdateUserDto;
+import homework1.model.dto.UserActionRequestDto;
+import homework1.model.entity.User;
 
 public class UserUtils {
     public static User getFirstUser() {
