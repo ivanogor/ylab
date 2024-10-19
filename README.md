@@ -8,13 +8,18 @@
 
 ### Инструкции по запуску
 1. Клонируйте репозиторий на свой локальный компьютер:
+```
    git clone https://github.com/ivanogor/ylab.git
    cd ylab
+```
 2. Запустите Docker Compose для развертывания PostgreSQL:
+   ```
    docker-compose up -d
-3. Выполните сборку проекта с помощью Maven:
+4. Выполните сборку проекта с помощью Maven:
+   ```
    mvn clean install
-4. Запустите приложение:
+6. Запустите приложение:
+   ```
    java -jar target/ylab-2.0-jar-with-dependencies.jar
 
 # Пример команд для проверки(Вводить отдельно через Enter)
