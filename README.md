@@ -26,8 +26,8 @@
 
 ## Регистрация нового пользователя
 1  
-John Doe  
-john.doe@example.com  
+New User  
+newUser@example.com  
 password123  
 
 ## Вход в систему
