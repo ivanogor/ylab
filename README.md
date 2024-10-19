@@ -3,6 +3,9 @@
 ## Homework One
 [Ссылка на пул реквест](https://github.com/ivanogor/ylab/pull/1)
 
+## Homework Two
+[Ссылка на пул реквест](https://github.com/ivanogor/ylab/pull/2)
+
 ### Инструкции по запуску
 1. Клонируйте репозиторий на свой локальный компьютер:
    git clone https://github.com/ivanogor/ylab.git
