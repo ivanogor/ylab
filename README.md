@@ -4,9 +4,15 @@
 [Ссылка на пул реквест](https://github.com/ivanogor/ylab/pull/1)
 
 ### Инструкции по запуску
-1. Клонируйте репозиторий на свой локальный компьютер.
-2. Откройте проект в вашей IDE.
-3. Запустите класс `Main` для начала работы с приложением.
+1. Клонируйте репозиторий на свой локальный компьютер:
+   git clone https://github.com/ivanogor/ylab.git
+   cd ylab
+2. Запустите Docker Compose для развертывания PostgreSQL:
+   docker-compose up -d
+3. Выполните сборку проекта с помощью Maven:
+   mvn clean install
+4. Запустите приложение:
+   java -jar target/ylab-2.0-jar-with-dependencies.jar
 
 # Пример команд для проверки(Вводить отдельно через Enter)
 
@@ -162,13 +168,14 @@ Exercise
 
 - **Имя**: Огорь Иван
 
-# Инструкции по запуску
-
-1. Клонируйте репозиторий на свой локальный компьютер.
-2. Откройте проект в вашей IDE.
-3. Запустите класс `Main` для начала работы с приложением.
-
 # Зависимости
-
-- Java 22
-- Lombok (для генерации геттеров, сеттеров и других методов)
+- Java 17
+- Lombok
+- JUnit 5
+- Mockito
+- AssertJ
+- Liquibase
+- PostgreSQL Driver
+- SLF4J
+- Logback Classic
+- Testcontainers
