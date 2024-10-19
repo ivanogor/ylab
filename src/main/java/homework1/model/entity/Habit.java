@@ -17,6 +17,11 @@ import java.util.List;
 @NoArgsConstructor
 public class Habit {
     /**
+     * Уникальный идентификатор привычки.
+     */
+    private Long id;
+
+    /**
      * Название привычки.
      */
     private String name;

@@ -100,4 +100,6 @@ public interface HabitService {
      * @return Объект DTO, содержащий отчет о прогрессе пользователя.
      */
     UserProgressReportDto generateUserProgressReport(GenerateUserProgressReportDto generateUserProgressReportDto);
+
+    Habit getHabitByName(User user, String name);
 }

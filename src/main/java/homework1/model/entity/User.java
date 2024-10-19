@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
 
+    private Long id;
     /**
      * Имя пользователя.
      */
