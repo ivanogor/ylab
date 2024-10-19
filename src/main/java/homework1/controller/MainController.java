@@ -18,11 +18,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Класс MainController является центральным контроллером для обработки взаимодействия с пользователем
+ * и управления потоком приложения. Он координирует между представлением, сервисами и репозиториями
+ * для выполнения различных операций, таких как регистрация пользователя, вход в систему, управление привычками
+ * и генерация отчетов.
+ */
 public class MainController {
     private final UserService userService;
     private final HabitService habitService;
     private final ConsoleView view;
 
+    /**
+     * Конструирует новый экземпляр MainController и инициализирует необходимые сервисы
+     * и компоненты представления.
+     */
     public MainController() {
         UserRepository userRepository = new UserRepositoryImpl();
         HabitRepository habitRepository = new HabitRepositoryImpl();
@@ -31,6 +41,10 @@ public class MainController {
         this.view = new ConsoleView();
     }
 
+    /**
+     * Запускает приложение, отображая главное меню и обрабатывая выбор пользователя.
+     * Метод работает в цикле до тех пор, пока пользователь не решит выйти из приложения.
+     */
     public void start() {
         User currentUser = null;
 
@@ -167,12 +181,22 @@ public class MainController {
         }
     }
 
+    /**
+     * Получает и отображает всех пользователей в системе.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void getAllUsers(User currentUser) {
         List<User> users = userService.getAllUsers(currentUser);
         System.out.println("All users:");
         users.forEach(System.out::println);
     }
 
+    /**
+     * Регистрирует нового пользователя, собирая ввод пользователя и создавая новый объект User.
+     *
+     * @return Новый зарегистрированный объект User.
+     */
     private User registerUser() {
         String name = view.getUserInput("Enter name:");
         String email = view.getUserInput("Enter email:");
@@ -191,6 +215,11 @@ public class MainController {
         return user;
     }
 
+    /**
+     * Входит в систему пользователя, собирая email и пароль и проверяя учетные данные.
+     *
+     * @return Объект User, если вход выполнен успешно, иначе null.
+     */
     private User loginUser() {
         String email = view.getUserInput("Enter email:");
         String password = view.getUserInput("Enter password:");
@@ -201,6 +230,11 @@ public class MainController {
         return user;
     }
 
+    /**
+     * Обновляет информацию текущего пользователя на основе ввода пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void updateUser(User currentUser) {
         String newName = view.getUserInput("Enter new name (leave empty to skip):");
         String newEmail = view.getUserInput("Enter new email (leave empty to skip):");
@@ -211,6 +245,11 @@ public class MainController {
         view.displayMessage("User updated successfully.");
     }
 
+    /**
+     * Удаляет пользователя на основе предоставленного email.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void deleteUser(User currentUser) {
         String email = view.getUserInput("Enter email of the user to delete:");
 
@@ -219,6 +258,9 @@ public class MainController {
         view.displayMessage("User deleted successfully.");
     }
 
+    /**
+     * Сбрасывает пароль пользователя на основе предоставленного email и нового пароля.
+     */
     private void resetPassword() {
         String email = view.getUserInput("Enter email:");
         String newPassword = view.getUserInput("Enter new password:");
@@ -228,6 +270,11 @@ public class MainController {
         view.displayMessage("Password reset successfully.");
     }
 
+    /**
+     * Блокирует пользователя на основе предоставленного email.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void blockUser(User currentUser) {
         String email = view.getUserInput("Enter email of the user to block:");
 
@@ -236,6 +283,11 @@ public class MainController {
         view.displayMessage("User blocked successfully.");
     }
 
+    /**
+     * Разблокирует пользователя на основе предоставленного email.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void unblockUser(User currentUser) {
         String email = view.getUserInput("Enter email of the user to unblock:");
 
@@ -244,6 +296,11 @@ public class MainController {
         view.displayMessage("User unblocked successfully.");
     }
 
+    /**
+     * Создает новую привычку для текущего пользователя на основе ввода пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void createHabit(User currentUser) {
         String name = view.getUserInput("Enter habit name:");
         String description = view.getUserInput("Enter habit description:");
@@ -262,6 +319,11 @@ public class MainController {
         view.displayMessage("Habit created successfully.");
     }
 
+    /**
+     * Обновляет существующую привычку для текущего пользователя на основе ввода пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void updateHabit(User currentUser) {
         String oldHabitName = view.getUserInput("Enter old habit name:");
         String newHabitName = view.getUserInput("Enter new habit name (leave empty to skip):");
@@ -275,6 +337,11 @@ public class MainController {
         view.displayMessage("Habit updated successfully.");
     }
 
+    /**
+     * Удаляет существующую привычку для текущего пользователя на основе ввода пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void deleteHabit(User currentUser) {
         String habitName = view.getUserInput("Enter habit name to delete:");
 
@@ -283,6 +350,11 @@ public class MainController {
         view.displayMessage("Habit deleted successfully.");
     }
 
+    /**
+     * Получает и отображает все привычки для текущего пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void getAllHabits(User currentUser) {
         view.displayMessage("All habits:");
         Set<Habit> habits = habitService.getAllHabits(currentUser);
@@ -293,6 +365,11 @@ public class MainController {
         }
     }
 
+    /**
+     * Получает и отображает привычки, созданные в определенную дату, для текущего пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void getHabitsByCreationDate(User currentUser) {
         LocalDate creationDate = view.getUserDateInput("Enter creation date (YYYY-MM-DD):");
 
@@ -305,6 +382,11 @@ public class MainController {
         }
     }
 
+    /**
+     * Получает и отображает привычки с определенной частотой для текущего пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void getHabitsByFrequency(User currentUser) {
         Habit.Frequency frequency = getFrequencyInput("Enter frequency (DAILY/WEEKLY):");
 
@@ -317,6 +399,11 @@ public class MainController {
         }
     }
 
+    /**
+     * Отмечает привычку как выполненную для текущего пользователя на основе ввода пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void markHabitAsCompleted(User currentUser) {
         String habitName = view.getUserInput("Enter habit name:");
         LocalDate completionDate = view.getUserDateInput("Enter completion date (YYYY-MM-DD):");
@@ -326,15 +413,25 @@ public class MainController {
         view.displayMessage("Habit marked as completed successfully.");
     }
 
+    /**
+     * Подсчитывает количество выполнений привычки за определенный период для текущего пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void countHabitCompletionsForPeriod(User currentUser) {
         String habitName = view.getUserInput("Enter habit name:");
-        CountHabitCompletionsForPeriodDto.Period period = getPeriodInput("Enter period (DAY/WEEK/MONTH):");
+        CountHabitCompletionsForPeriodDto.Period period = getPeriodInput();
 
         CountHabitCompletionsForPeriodDto countHabitCompletionsForPeriodDto = new CountHabitCompletionsForPeriodDto(currentUser, habitName, period);
         long count = habitService.countHabitCompletionsForPeriod(countHabitCompletionsForPeriodDto);
         view.displayMessage("Number of completions: " + count);
     }
 
+    /**
+     * Получает и отображает текущую серию выполнений для определенной привычки для текущего пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void getCurrentStreak(User currentUser) {
         String habitName = view.getUserInput("Enter habit name:");
 
@@ -343,6 +440,11 @@ public class MainController {
         view.displayMessage("Current streak: " + streak);
     }
 
+    /**
+     * Получает и отображает процент выполнения для определенной привычки за период для текущего пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void getCompletionPercentage(User currentUser) {
         String habitName = view.getUserInput("Enter habit name:");
         LocalDate startDate = view.getUserDateInput("Enter start date (YYYY-MM-DD):");
@@ -353,6 +455,11 @@ public class MainController {
         view.displayMessage("Completion percentage: " + percentage + "%");
     }
 
+    /**
+     * Генерирует и отображает отчет о прогрессе пользователя за определенный период для текущего пользователя.
+     *
+     * @param currentUser Текущий вошедший пользователь.
+     */
     private void generateUserProgressReport(User currentUser) {
         LocalDate startDate = view.getUserDateInput("Enter start date (YYYY-MM-DD):");
         LocalDate endDate = view.getUserDateInput("Enter end date (YYYY-MM-DD):");
@@ -367,6 +474,12 @@ public class MainController {
         });
     }
 
+    /**
+     * Вспомогательный метод для получения валидного значения частоты от пользователя.
+     *
+     * @param prompt Приглашение для отображения пользователю.
+     * @return Валидное значение Habit.Frequency.
+     */
     private Habit.Frequency getFrequencyInput(String prompt) {
         while (true) {
             try {
@@ -379,10 +492,15 @@ public class MainController {
         }
     }
 
-    private CountHabitCompletionsForPeriodDto.Period getPeriodInput(String prompt) {
+    /**
+     * Вспомогательный метод для получения валидного значения периода от пользователя.
+     *
+     * @return Валидное значение CountHabitCompletionsForPeriodDto.Period.
+     */
+    private CountHabitCompletionsForPeriodDto.Period getPeriodInput() {
         while (true) {
             try {
-                String input = view.getUserInput(prompt).toUpperCase();
+                String input = view.getUserInput("Enter period (DAY/WEEK/MONTH):").toUpperCase();
                 return CountHabitCompletionsForPeriodDto.Period.valueOf(input);
             } catch (IllegalArgumentException e) {
                 view.displayMessage("Invalid period. Please enter DAY, WEEK, or MONTH.");

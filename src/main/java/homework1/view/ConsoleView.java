@@ -4,13 +4,25 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+/**
+ * Класс ConsoleView отвечает за взаимодействие с пользователем через консоль.
+ * Он предоставляет методы для отображения меню, получения ввода пользователя,
+ * отображения сообщений и обработки дат.
+ */
 public class ConsoleView {
     private final Scanner scanner;
 
+    /**
+     * Конструктор класса ConsoleView.
+     * Инициализирует новый экземпляр Scanner для чтения ввода пользователя.
+     */
     public ConsoleView() {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Отображает главное меню приложения.
+     */
     public void displayMenu() {
         System.out.println("1. Register");
         System.out.println("2. Login");
@@ -34,6 +46,11 @@ public class ConsoleView {
         System.out.println("0. Exit");
     }
 
+    /**
+     * Получает выбор пользователя из главного меню.
+     *
+     * @return Выбор пользователя в виде целого числа.
+     */
     public int getUserChoice() {
         while (true) {
             try {
@@ -45,11 +62,23 @@ public class ConsoleView {
         }
     }
 
+    /**
+     * Получает строковый ввод от пользователя.
+     *
+     * @param prompt Сообщение, отображаемое пользователю перед вводом.
+     * @return Строка, введенная пользователем.
+     */
     public String getUserInput(String prompt) {
         System.out.print(prompt + " ");
         return scanner.nextLine();
     }
 
+    /**
+     * Получает дату от пользователя.
+     *
+     * @param prompt Сообщение, отображаемое пользователю перед вводом.
+     * @return Объект LocalDate, представляющий введенную дату.
+     */
     public LocalDate getUserDateInput(String prompt) {
         while (true) {
             try {
@@ -61,6 +90,11 @@ public class ConsoleView {
         }
     }
 
+    /**
+     * Отображает сообщение пользователю.
+     *
+     * @param message Сообщение для отображения.
+     */
     public void displayMessage(String message) {
         System.out.println(message);
     }

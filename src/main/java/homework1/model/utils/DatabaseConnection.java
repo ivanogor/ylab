@@ -9,6 +9,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Утилитарный класс для управления подключением к базе данных.
+ * Он загружает параметры подключения из файла application.properties и предоставляет методы
+ * для получения соединения с базой данных и настройки тестового подключения.
+ */
 @Slf4j
 @UtilityClass
 public class DatabaseConnection {
@@ -30,10 +35,23 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Получает соединение с базой данных.
+     *
+     * @return Объект Connection для подключения к базе данных.
+     * @throws SQLException если произошла ошибка при установлении соединения.
+     */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, username, password);
     }
 
+    /**
+     * Устанавливает параметры подключения для тестовой базы данных.
+     *
+     * @param testUrl      URL тестовой базы данных.
+     * @param testUsername Имя пользователя для тестовой базы данных.
+     * @param testPassword Пароль для тестовой базы данных.
+     */
     public static void setTestConnection(String testUrl, String testUsername, String testPassword) {
         url = testUrl;
         username = testUsername;
