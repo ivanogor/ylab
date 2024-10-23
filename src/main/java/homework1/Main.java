@@ -13,11 +13,11 @@ import java.sql.Connection;
 
 @Slf4j
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         try {
-runLiquibase();
+            runLiquibase();
         } catch (Exception e) {
-        log.warn("Run liquibase exception: {}", e.getMessage());
+            log.warn("Run liquibase exception: {}", e.getMessage());
         }
         log.info("Run liquibase done");
         MainController controller = new MainController();
