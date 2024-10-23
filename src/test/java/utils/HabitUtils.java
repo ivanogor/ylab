@@ -46,7 +46,6 @@ public class HabitUtils {
                 .build();
     }
 
-
     public static CreateHabitDto getCreateHabitDto() {
         return CreateHabitDto.builder()
                 .habit(getThirdHabit())
@@ -125,6 +124,30 @@ public class HabitUtils {
     }
 
     public static GenerateUserProgressReportDto getUserProgressReportDto() {
+        return GenerateUserProgressReportDto.builder()
+                .user(UserUtils.getFirstUser())
+                .startDate(LocalDate.now().minusDays(3))
+                .endDate(LocalDate.now())
+                .build();
+    }
+
+    public static GetCurrentStreakDto getCurrentStreakDtoWithNoCompletions() {
+        return GetCurrentStreakDto.builder()
+                .user(UserUtils.getFirstUser())
+                .name("habitOne")
+                .build();
+    }
+
+    public static GetCompletionPercentageDto getCompletionPercentageDtoWithNoCompletions() {
+        return GetCompletionPercentageDto.builder()
+                .user(UserUtils.getFirstUser())
+                .name("habitOne")
+                .startDate(LocalDate.now().minusDays(3))
+                .endDate(LocalDate.now())
+                .build();
+    }
+
+    public static GenerateUserProgressReportDto getUserProgressReportDtoWithNoHabits() {
         return GenerateUserProgressReportDto.builder()
                 .user(UserUtils.getFirstUser())
                 .startDate(LocalDate.now().minusDays(3))

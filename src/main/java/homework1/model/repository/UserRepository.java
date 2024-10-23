@@ -16,7 +16,7 @@ public interface UserRepository {
      *
      * @param user Пользователь, которого нужно добавить.
      */
-    void addUser(User user);
+    boolean addUser(User user);
 
     /**
      * Проверяет, существует ли пользователь с указанным email.

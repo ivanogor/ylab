@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="1" author="ivanogor">
+        <sql>
+            CREATE TABLE habit_tracker.habits (
+                                            id BIGINT DEFAULT nextval('habit_tracker.habit_id_seq') PRIMARY KEY,
+                                            name VARCHAR(50) NOT NULL,
+                                            description TEXT,
+                                            frequency VARCHAR(10) NOT NULL,
+                                            creation_date DATE NOT NULL,
+                                            completions TEXT,
+                                            is_completed BOOLEAN NOT NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="ivanogor">
+        <sql>
+            CREATE TABLE habit_tracker.users (
+                                           id BIGINT DEFAULT nextval('habit_tracker.user_id_seq') PRIMARY KEY,
+                                           name VARCHAR(50) NOT NULL,
+                                           email VARCHAR(100) NOT NULL UNIQUE,
+                                           password VARCHAR(100) NOT NULL,
+                                           role VARCHAR(10) NOT NULL,
+                                           is_blocked BOOLEAN NOT NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="3" author="ivanogor">
+        <sql>
+            CREATE TABLE habit_tracker.user_habits (
+                                                 user_id BIGINT NOT NULL,
+                                                 habit_id BIGINT NOT NULL,
+                                                 id BIGINT DEFAULT nextval('habit_tracker.user_id_seq') PRIMARY KEY,
+                                                 CONSTRAINT fk_user_habits_user_id FOREIGN KEY (user_id) REFERENCES habit_tracker.users(id),
+                                                 CONSTRAINT fk_user_habits_habit_id FOREIGN KEY (habit_id) REFERENCES habit_tracker.habits(id)
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

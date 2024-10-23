@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="1" author="ivanogor">
+        <sql>
+            INSERT INTO habit_tracker.users (name, email, password, role, is_blocked)
+            VALUES ('John Doe', 'john.doe@example.com', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'USER', false);
+
+            INSERT INTO habit_tracker.users (name, email, password, role, is_blocked)
+            VALUES ('Jane Smith', 'jane.smith@example.com', 'c6ba91b90d922e159893f46c387e5dc1b3dc5c101a5a4522f03b987177a24a91', 'ADMIN', false);
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="ivanogor">
+        <sql>
+            INSERT INTO habit_tracker.habits (name, description, frequency, creation_date, completions, is_completed)
+            VALUES ('Exercise', 'Daily exercise routine', 'DAILY', '2023-10-01', '[]', false);
+
+            INSERT INTO habit_tracker.habits (name, description, frequency, creation_date, completions, is_completed)
+            VALUES ('Reading', 'Read a book every week', 'WEEKLY', '2023-10-01', '[]', false);
+        </sql>
+    </changeSet>
+
+    <changeSet id="3" author="ivanogor">
+        <sql>
+            INSERT INTO habit_tracker.user_habits (user_id, habit_id)
+            VALUES (
+                           (SELECT id FROM habit_tracker.users WHERE email = 'john.doe@example.com'),
+                           (SELECT id FROM habit_tracker.habits WHERE name = 'Exercise')
+                   );
+
+            INSERT INTO habit_tracker.user_habits (user_id, habit_id)
+            VALUES (
+                           (SELECT id FROM habit_tracker.users WHERE email = 'jane.smith@example.com'),
+                           (SELECT id FROM habit_tracker.habits WHERE name = 'Reading')
+                   );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -18,7 +18,7 @@ public interface HabitRepository {
      * @param habit Привычка, которую нужно создать.
      * @return true, если привычка успешно создана, иначе false.
      */
-    boolean createHabit(User user, Habit habit);
+    Habit createHabit(User user, Habit habit);
 
     /**
      * Обновляет существующую привычку пользователя.

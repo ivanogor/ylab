@@ -65,7 +65,7 @@ public class UserServiceTests {
         User user = UserUtils.getFirstUser();
         user.setEmail("invalid.com");
         //when
-        when(userRepositoryImpl.isExist(anyString())).thenReturn(false);
+
         //then
         assertThrows(NotValidEmailException.class, () -> userService.register(user));
         verify(userRepositoryImpl, never()).addUser(user);

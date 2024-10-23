@@ -3,7 +3,9 @@ package homework1.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
 import java.util.Set;
+
 import lombok.NoArgsConstructor;
 
 /**
@@ -15,6 +17,11 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 public class User {
+
+    /**
+     * Уникальный идентификатор привычки.
+     */
+    private Long id;
 
     /**
      * Имя пользователя.
