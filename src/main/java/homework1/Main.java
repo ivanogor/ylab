@@ -7,13 +7,19 @@ import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 
+@Slf4j
 public class Main {
-    public static void main(String[] args) throws Exception {
-        runLiquibase();
-
+    public static void main(String[] args){
+        try {
+runLiquibase();
+        } catch (Exception e) {
+        log.warn("Run liquibase exception: {}", e.getMessage());
+        }
+        log.info("Run liquibase done");
         MainController controller = new MainController();
         controller.start();
     }

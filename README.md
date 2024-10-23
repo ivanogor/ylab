@@ -26,7 +26,7 @@
 
 ## Регистрация нового пользователя
 1  
-New User
+New User  
 newUser@example.com  
 password123  
 
