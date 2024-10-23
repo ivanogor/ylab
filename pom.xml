@@ -26,6 +26,11 @@
         <liquibase.maven.plugin.version>4.29.2</liquibase.maven.plugin.version>
         <maven.assembly.plugin.version>3.3.0</maven.assembly.plugin.version>
         <org.testcontainers.version>1.20.2</org.testcontainers.version>
+        <javax.servler.version>2.5</javax.servler.version>
+        <jackson-databind.version>2.18.0</jackson-databind.version>
+        <mapstruct.version>1.6.2</mapstruct.version>
+        <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
+        <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 
         <!-- Расположение application-properties -->
         <application.properties.path>src/main/resources/application.properties</application.properties.path>
@@ -116,6 +121,51 @@
             <artifactId>postgresql</artifactId>
             <version>${org.testcontainers.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!--  Java servlets  -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${javax.servler.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--  Jackson  -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+
+        <!--  MapStruct  -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--  Validate Dto  -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.validation-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
         </dependency>
     </dependencies>
 
