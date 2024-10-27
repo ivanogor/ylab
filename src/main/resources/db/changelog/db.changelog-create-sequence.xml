@@ -9,6 +9,7 @@
         <sql>
             CREATE SEQUENCE habit_tracker.habit_id_seq START WITH 1 INCREMENT BY 1;
             CREATE SEQUENCE habit_tracker.user_id_seq START WITH 1 INCREMENT BY 1;
+            CREATE SEQUENCE habit_tracker.role_id_seq START WITH 1 INCREMENT BY 1;
         </sql>
     </changeSet>
 </databaseChangeLog>
