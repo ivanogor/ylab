@@ -1,0 +1,6 @@
+<aspectj>
+    <aspects>
+        <aspect name="homework3.aspect.AuditAspect"/>
+        <aspect name="homework3.aspect.LoggingAspect"/>
+    </aspects>
+</aspectj>
